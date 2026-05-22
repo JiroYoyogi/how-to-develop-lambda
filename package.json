@@ -1,0 +1,19 @@
+{
+  "name": "lambda-todo-handson",
+  "version": "1.0.0",
+  "description": "",
+  "main": "invoke.mjs",
+  "scripts": {
+    "dev": "node invoke.mjs",
+    "zip": "zip -r function.zip index.mjs node_modules"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "module",
+  "dependencies": {
+    "@aws-sdk/client-s3": "^3.1050.0",
+    "axios": "^1.16.1",
+    "fast-xml-parser": "^5.8.0"
+  }
+}
