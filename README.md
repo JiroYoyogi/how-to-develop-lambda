@@ -20,6 +20,11 @@ aws s3 ls
 
 # ローカルで書いたコードをアップロードする
 
+## マネコンでコードを書くのは辛い
+
+- 関数名：`get-qiita-trends`
+- ランタイム：`Node.js 24.x`
+
 ## ローカルでコードを試しながら開発したい
 
 - invoke.mjs
@@ -307,6 +312,10 @@ JSONをバケットに保存
 npm run zip
 ```
 
+### S3でアップロードを試してみる
+
+バケット名：`my-lambda-source-{名前とか}`
+
 ### IAMポリシーを追加する
 
 ```
@@ -319,174 +328,3 @@ AmazonS3FullAccess
 - APIGW連携・パスパラメーター
 - APIGW連携・リクエストボディ
 - EventBridgeで定期実行
-
-
-
-
-
-
-
-# APIを作成する
-
-- APIタイプ：`HTTP API`
-- API名：`my-http-api`
-
-# パスに応じた処理をする
-
-## コードを変更
-
-- invoke.mjs
-
-```js
-const event = {
-  // APIGWでリクエスト
-  pathParameters: {
-    date: "2026-05-20-1700",
-  },
-  // 関数URLでリクエスト
-  rawPath: "/popular/2026-05-20-1700",
-  body: 
-    JSON.stringify({
-      completed: true
-    })
-};
-```
-
-- index.mjs
-
-ライブラリの追加読み込み
-
-```js
-import { S3Client, PutObjectCommand, GetObjectCommand } from '@aws-sdk/client-s3';
-```
-
-パスに日付があったらS3からJSONを取得する
-
-```js
-    // ファイル名が指定されてるいるか
-    const specificDate =
-      event.pathParameters?.date ??
-      event.rawPath?.split('/popular/')[1];
-
-    if (specificDate) {
-      try {
-        const response = await s3.send(
-          new GetObjectCommand({
-            Bucket: 'qiita-popular-ranking',
-            Key: `${specificDate}.json`,
-          })
-        );
-
-        const body = await response.Body.transformToString();
-
-        return {
-          statusCode: 200,
-          body,
-        };
-
-      } catch (err) {
-        console.log(err.message);
-        // ファイルが無い場合
-        return {
-          statusCode: 200,
-          body: JSON.stringify({}),
-        };
-      }
-    }
-```
-
-# リクエストボディを受け取る
-
-## プロジェクトディレクトを作成
-
-- このプロジェクトディレクトリを丸っと複製
-- 不要なNodeモジュールは削除した方が良いが今回はこのまま
-
-## コードを変更
-
-- invoke.mjs
-
-フォームを送信するイメージ
-
-```js
-import { handler } from './index.mjs';
-
-const event = {
-  // APIGWでリクエスト
-  pathParameters: {
-    date: "2026-05-20-1700",
-  },
-  // 関数URLでリクエスト
-  rawPath: "/popular/2026-05-20-1700",
-  body: 
-    JSON.stringify({
-      name: "代々木二郎",
-      email: "jiro@yoyogi.com",
-      content: "仕事のお願いをしたい"
-    })
-};
-
-const result = await handler(event);
-// console.log(result.body);
-console.log(JSON.parse(result.body));
-```
-
-- index.mjs
-
-```js
-import { S3Client, PutObjectCommand } from '@aws-sdk/client-s3';
-
-const s3 = new S3Client();
-
-const createFileName = () => {
-  const d = new Date();
-  
-  const yyyy = d.getFullYear();
-  const mm = String(d.getMonth() + 1).padStart(2, '0');
-  const dd = String(d.getDate()).padStart(2, '0');
-  const hh = String(d.getHours()).padStart(2, '0');
-  const ii = String(d.getMinutes()).padStart(2, '0');
-  const ss = String(d.getSeconds()).padStart(2, '0');
-
-  return `contact-${yyyy}-${mm}-${dd}-${hh}-${ii}-${ss}.json`;
-};
-
-export const handler = async (event) => {
-  try {
-    const body = event.body ? JSON.parse(event.body) : {};
-    const fileName = createFileName();
-
-    await s3.send(
-      new PutObjectCommand({
-        Bucket: 'qiita-popular-ranking',
-        Key: fileName,
-        Body: JSON.stringify(body),
-        ContentType: 'application/json',
-      })
-    );
-
-    return {
-      statusCode: 200,
-      body: JSON.stringify({
-        message: 'success',
-        fileName,
-      }),
-    };
-  } catch (err) {
-    return {
-      statusCode: 500,
-      body: JSON.stringify({
-        message: err.message,
-      }),
-    };
-  }
-};
-```
-
-## Lambdaを新規作成
-
-- 関数名：`my-func-form`
-- ランタイム：`Node.js 24.x`
-
-## コードをS3でアップロード
-
