@@ -57,7 +57,8 @@ node invoke.mjs
   "main": "invoke.mjs",
   "scripts": {
     "dev": "node invoke.mjs",
-    "zip": "zip function.zip index.mjs"
+    "zip": "zip -r function.zip index.mjs",
+    "zip-win": "Compress-Archive -Path index.mjs -DestinationPath function.zip"
   },
   "keywords": [],
   "author": "",
@@ -190,7 +191,8 @@ export const handler = async (event) => {
 node_modules配下もZIPに詰める
 
 ```
-"zip": "zip -r function.zip index.mjs node_modules"
+"zip": "zip -r function.zip index.mjs node_modules",
+"zip-win": "Compress-Archive -Path index.mjs,node_modules -DestinationPath function.zip"
 ```
 
 - コマンド
