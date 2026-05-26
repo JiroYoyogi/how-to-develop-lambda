@@ -58,7 +58,7 @@ node invoke.mjs
   "scripts": {
     "dev": "node invoke.mjs",
     "zip": "zip -r function.zip index.mjs",
-    "zip-win": "Compress-Archive -Path index.mjs -DestinationPath function.zip"
+    "zip-win": "Compress-Archive -Path index.mjs -DestinationPath function.zip -Force"
   },
   "keywords": [],
   "author": "",
