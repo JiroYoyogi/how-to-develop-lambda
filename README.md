@@ -192,7 +192,7 @@ node_modules配下もZIPに詰める
 
 ```
 "zip": "zip -r function.zip index.mjs node_modules",
-"zip-win": "Compress-Archive -Path index.mjs,node_modules -DestinationPath function.zip"
+"zip-win": "Compress-Archive -Path index.mjs,node_modules -DestinationPath function.zip -Force"
 ```
 
 - コマンド
