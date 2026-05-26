@@ -6,7 +6,8 @@ https://docs.aws.amazon.com/ja_jp/cli/latest/userguide/getting-started-install.h
 
 - AWSクレデンシャルの設定
 
-下記コマンドでS3バケットのリストが表示されればOK
+動画と同じ環境で進めるため、リージョンは **東京（ap-northeast-1）** に設定してください。
+下記コマンドを実行し、エラーが出ずにS3バケットのリスト（または何も出ずにプロンプトが戻る状態）が表示されれば設定OKです。
 
 ```
 aws s3 ls
