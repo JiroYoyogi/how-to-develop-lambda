@@ -58,7 +58,7 @@ node invoke.mjs
   "scripts": {
     "dev": "node invoke.mjs",
     "zip": "zip -r function.zip index.mjs",
-    "zip-win": "Compress-Archive -Path index.mjs -DestinationPath function.zip -Force"
+    "zip-win": "powershell -Command \"Compress-Archive -Path 'index.mjs' -DestinationPath function.zip -Force\""
   },
   "keywords": [],
   "author": "",
@@ -72,6 +72,10 @@ node invoke.mjs
 ```
 npm run zip
 ```
+
+💡 Windows環境で `npm run zip-win` が失敗する場合
+
+環境によってコマンドが正しく動作しないことがあります。その場合は、**動画の解説通り、エクスプローラー上で対象のindex.mjsを選択し、右クリックから「ZIPファイルに圧縮（または 送る ＞ 圧縮フォルダ）」**を行ってください。
 
 # Node.jsライブラリを使いたい
 
@@ -93,7 +97,7 @@ export const handler = async (event) => {
     console.log(resQiita);
     return {
       statusCode: 200,
-      body: JSON.stringify('Successed!'),
+      body: JSON.stringify('Succeeded!'),
     };
   } catch (err) {
     return {
@@ -123,7 +127,7 @@ export const handler = async (event) => {
     console.log(data);
     return {
       statusCode: 200,
-      body: JSON.stringify('Successed!'),
+      body: JSON.stringify('Succeeded!'),
     };
   } catch (err) {
     return {
@@ -192,7 +196,7 @@ node_modules配下もZIPに詰める
 
 ```
 "zip": "zip -r function.zip index.mjs node_modules",
-"zip-win": "Compress-Archive -Path index.mjs,node_modules -DestinationPath function.zip -Force"
+"zip-win": "powershell -Command \"Compress-Archive -Path 'index.mjs', 'node_modules' -DestinationPath function.zip -Force\""
 ```
 
 - コマンド
@@ -200,6 +204,10 @@ node_modules配下もZIPに詰める
 ```
 npm run zip
 ```
+
+💡 Windows環境で `npm run zip-win` が失敗する場合
+
+環境によってコマンドが正しく動作しないことがあります。その場合は、**動画の解説通り、エクスプローラー上で対象のindex.mjsとnode_modulesフォルダを同時に選択し、右クリックから「ZIPファイルに圧縮（または 送る ＞ 圧縮フォルダ）」**を行ってください。
 
 ## 関数URLを発行する
 
@@ -253,7 +261,7 @@ const headers = {
 
 ## S3バケットを作成
 
-バケット名：`qiita-ternds-{名前とか}`
+バケット名：`qiita-trends-{名前とか}`
 
 ## ライブラリをインストール
 
@@ -313,6 +321,11 @@ JSONをバケットに保存
 ```
 npm run zip
 ```
+
+💡 Windows環境で `npm run zip-win` が失敗する場合
+
+環境によってコマンドが正しく動作しないことがあります。その場合は、**動画の解説通り、エクスプローラー上で対象のindex.mjsとnode_modulesフォルダを同時に選択し、右クリックから「ZIPファイルに圧縮（または 送る ＞ 圧縮フォルダ）」**を行ってください。
+
 
 ### S3でアップロードを試してみる
 

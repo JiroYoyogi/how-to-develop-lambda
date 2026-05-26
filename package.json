@@ -6,7 +6,7 @@
   "scripts": {
     "dev": "node invoke.mjs",
     "zip": "zip -r function.zip index.mjs",
-    "zip-win": "Compress-Archive -Path index.mjs -DestinationPath function.zip -Force"
+    "zip-win": "powershell -Command \"Compress-Archive -Path 'index.mjs' -DestinationPath function.zip -Force\""
   },
   "keywords": [],
   "author": "",
