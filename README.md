@@ -278,7 +278,9 @@ npm i @aws-sdk/client-s3
 
 ```js
 import { S3Client, PutObjectCommand } from '@aws-sdk/client-s3';
-const s3 = new S3Client();
+const s3 = new S3Client({
+  region: 'ap-northeast-1',
+});
 ```
 
 ### オブジェクト名（ファイル名）を作成する
